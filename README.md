@@ -163,23 +163,65 @@ class Session{
 
 文献
 
-| 名称     | 类型   | 约束 | 英文名称     |
-| -------- | ------ | ---- | ------------ |
-| 文献编号 | long   | 主键 | id           |
-| 作者     | String | 非空 | author       |
-| 篇名     | String | 非空 | title        |
-| 类型     | String | 非空 | category     |
-| 出版机构 | String | 非空 | publisher    |
-| 出版时间 | String | 非空 | publishTime  |
-| 卷号     | String | 非空 | volumeNumber |
-| 期号     | String | 非空 | issueNumber  |
+| 名称     | 类型     | 约束 | 英文名称     |
+| -------- | -------- | ---- | ------------ |
+| 文献编号 | long     | 主键 | id           |
+| 作者     | String   | 非空 | author       |
+| 篇名     | String   | 非空 | title        |
+| 类型     | String   | 非空 | category     |
+| 出版机构 | String   | 非空 | publisher    |
+| 出版时间 | sql.Date | 非空 | publishTime  |
+| 卷号     | String   | 非空 | volumeNumber |
+| 期号     | String   | 非空 | issueNumber  |
+| 被引次数 | long     | 非空 | citedNumber  |
 
-<!-- ### 接口
+### 接口
 
-文献 DAO
+文献 DAO (M 层)
 
-selectById
-insert
-update
-delete -->
+| 方法名              | 参数 | 返回值 |
+| ------------------- | ---- | ------ |
+| selectById          | ?    | ?      |
+| selectByTitle       | ?    | ?      |
+| selectByAuthor      | ?    | ?      |
+| selectByPublishTime | ?    | ?      |
+| delete              | ?    | ?      |
+| update              | ?    | ?      |
+| insert              | ?    | ?      |
+| loadFromFile        | ?    | ?      |
+| saveToFile          | ?    | ?      |
 
+
+### 控制器
+
+文献管理控制器 (C 层)
+
+| 成员          | 类型          |
+| ------------- | ------------- |
+| literatureDao | LiteratureDAO |
+
+| 方法名                      | 参数                                    | 返回值             |
+| --------------------------- | --------------------------------------- | ------------------ |
+| queryByField                | (String filedName, String fieldContent) | `List<Literature>` |
+| queryAll                    | ()                                      | `List<Literature>` |
+| queryBetweenPublishTime     | (sql.Date start sql.Date end)           | `List<Literature>` |
+| queryFuzzyByTitle           | (String cond)                           | `List<Literature>` |
+| loadFromFile                | (String filePath)                       | void               |
+| saveToFile                  | (String filePath)                       | void               |
+| queryAllSortedByPublishTime | ()                                      | `List<Literature>` |
+| deleteById                  | (long id)                               | void               |
+| insert                      | (Literaure literature)                  | void               |
+| updateCitedNumber           | (long id, long citedNumber)             | void               |
+
+会话控制器 (C 层)
+
+| 成员           | 类型   |
+| -------------- | ------ |
+| systemPassword | String |
+
+| 方法名      | 参数              | 返回值         |
+| ----------- | ----------------- | -------------- |
+| adminLogin  | (String password) | Session / null |
+
+
+<!-- | vistorLogin | ()                | Session        | -->
