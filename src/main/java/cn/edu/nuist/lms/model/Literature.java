@@ -92,9 +92,28 @@ public class Literature {
 
     @Override
     public String toString() {
-        return "Literature [author=" + author + ", category=" + category + ", citedNumber=" + citedNumber + ", id=" + id
-                + ", issueNumber=" + issueNumber + ", publishTime=" + publishTime + ", publisher=" + publisher
-                + ", title=" + title + ", volumeNumber=" + volumeNumber + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("Literature [");
+        builder.append("id=");
+        builder.append(id);
+        builder.append(", author=");
+        builder.append(author);
+        builder.append(", category=");
+        builder.append(category);
+        builder.append(", citedNumber=");
+        builder.append(citedNumber);
+        builder.append(", issueNumber=");
+        builder.append(issueNumber);
+        builder.append(", publishTime=");
+        builder.append(publishTime);
+        builder.append(", publisher=");
+        builder.append(publisher);
+        builder.append(", title=");
+        builder.append(title);
+        builder.append(", volumeNumber=");
+        builder.append(volumeNumber);
+        builder.append("]");
+        return builder.toString();
     }
 
 }
