@@ -1,0 +1,1343 @@
+package shuben;
+
+import java.sql.Date;
+
+public class Literature{
+	private long id;
+	private String author;
+	private String title;
+	private String category;
+	private String publisher;
+	private Date publishTime;
+	private String volumeNumber;
+	private String issueNumber;
+	private long citedNumber;
+	public void setId(long id) {
+	      this.id=id;
+	}
+	public void setAuthor(String author) {
+	      this.author=author;
+	}
+	public void setTitle(String title) {
+	      this.title=title;
+	}
+	public void setCategory(String category) {
+	      this.category=category;
+	}
+	public void setPublisher(String publisher) {
+	      this.publisher=publisher;
+	}
+	public void setPublishTime(Date publishTime) {
+	      this.publishTime=publishTime;
+	}
+	public void setVolumeNumber(String volumeNumber) {
+	      this.volumeNumber=volumeNumber;
+	}
+	public void setIssueNumber(String issueNumber) {
+	      this.issueNumber=issueNumber;
+	}
+	public void setCitedNumber(long citedNumber) {
+	      this.citedNumber=citedNumber;
+	}
+	public long getId() {
+	      return id;
+	}
+	public String getAuthor() {
+	      return author;
+	}
+	public String getTitle() {
+	      return title;
+	}
+	public String getCategory() {
+	      return category;
+	}
+	public String getPublisher() {
+	      return publisher;
+	}
+	public Date getPublishTime() {
+	      return publishTime;
+	}
+	public String getVolumeNumber() {
+	      return volumeNumber;
+	}
+	public String getIssueNumber() {
+	      return issueNumber;
+	}
+	public long getCitedNumber() {
+	      return citedNumber;
+	}
+}
+
+package shuben;
+	import java.awt.BorderLayout;
+	import java.awt.FlowLayout;
+	import java.awt.GridLayout;
+	import java.awt.Panel;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+
+	import javax.swing.JButton;
+	import javax.swing.JFrame;
+	import javax.swing.JLabel;
+	import javax.swing.JTextField;
+
+	public class LoginInterface extends JFrame{
+		private JFrame jFrame;
+		private JButton button1;
+		private JButton button2;
+		private JButton button3;
+		private JLabel label;
+		private JTextField textField;
+		public LoginInterface() {
+			jFrame = new JFrame("����Ա��¼");
+			label = new JLabel("����");
+			textField = new JTextField(20);
+			button1 = new JButton("��¼");
+			button2 = new JButton("���");
+			button3 = new JButton("�˳�");
+
+			
+		}
+		
+		private void init() {
+			Panel northPanel = new Panel();
+			northPanel.add(label);
+			northPanel.add(textField);
+			Panel centerPanel = new Panel();
+			FlowLayout grid = new FlowLayout();
+			centerPanel.setLayout(grid);
+			centerPanel.add(button1);
+			centerPanel.add(button2);
+			centerPanel.add(button3);
+			jFrame.add(northPanel,BorderLayout.NORTH);
+			jFrame.add(centerPanel,FlowLayout.CENTER);
+		}
+		
+		public void showMe() {
+			init();
+			button1.addActionListener(new LoginButtonActionHandler());
+			button2.addActionListener(new ClearButtonActionHandler());
+			button3.addActionListener(new ExitButtonActionHandler());
+			jFrame.setBounds(50,50,400,200);
+			jFrame.setVisible(true);
+			
+		}
+		private class LoginButtonActionHandler implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				String password;
+				password = textField.getText();
+				Session session;
+				session = new SessionController().adminLogin(password);
+				if(!(session.equals(null))) {
+					jFrame.dispose();
+					new Menu().showMe();
+				}
+			}
+		}
+		private class ClearButtonActionHandler implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				textField.setText("");
+			}	
+		}
+		private class ExitButtonActionHandler implements ActionListener{
+			
+			public void actionPerformed(ActionEvent e) {
+				new Interface().showMe();
+				jFrame.dispose();
+			}
+		}
+	}
+
+
+
+package shuben;
+	import java.awt.BorderLayout;
+	import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+
+	import javax.swing.ImageIcon;
+	import javax.swing.JButton;
+	import javax.swing.JDialog;
+	import javax.swing.JFrame;
+	import javax.swing.JPanel;
+	import javax.swing.JToolBar;
+
+
+	public class ManageDialog extends JDialog{
+		private UserDao userDao;
+		private JFrame jFrame;
+		private JPanel jpanel; 
+		private JButton labelE;
+		private JToolBar toolBar1;
+		private JToolBar toolBar2;
+		private JToolBar toolBar3,toolBar4,toolBar5,toolBar6,toolBarE;
+		private JButton jbutton1,jbutton2,jbutton3,jbutton4,jbutton5,jbuttonExit;
+		
+		public ManageDialog() {
+			labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+			labelE.setToolTipText("�������˵�");
+			jFrame = new JFrame("���׹���");
+			labelE.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					jFrame.dispose();
+					new Menu().showMe();
+				}
+			});
+		}
+		public void init() {
+			toolBar1 = new JToolBar();
+			toolBar2 = new JToolBar();
+			toolBar3 = new JToolBar();
+			toolBar4 = new JToolBar();
+			toolBar5 = new JToolBar();
+			toolBar6 = new JToolBar();
+			toolBarE = new JToolBar();
+			
+			jbutton1 = new JButton("���ݵ���",new ImageIcon(this.getClass().getResource("Import.gif")));
+			jbutton1.setToolTipText("���ݵ���");//���ݵ���
+			
+			jbutton2 = new JButton("���ݵ���",new ImageIcon(this.getClass().getResource("Derive.gif")));
+			jbutton2.setToolTipText("���ݵ���");
+			
+			jbutton3 = new JButton("����¼��",new ImageIcon(this.getClass().getResource("Insert.gif")));
+			jbutton3.setToolTipText("����¼��");
+			
+			jbutton4 = new JButton("�����޸�",new ImageIcon(this.getClass().getResource("Update.gif")));
+			jbutton4.setToolTipText("�����޸�");
+			
+			jbutton5 = new JButton("����ɾ��",new ImageIcon(this.getClass().getResource("Delete.gif")));
+			jbutton5.setToolTipText("����ɾ��");
+			
+			jbuttonExit = new JButton(new ImageIcon(this.getClass().getResource("Exit.gif")));
+			jbuttonExit.setToolTipText("�˳�");
+			
+			toolBar1.add(jbutton1);
+			toolBar2.add(jbutton2);
+			toolBar3.add(jbutton3);
+			toolBar4.add(jbutton4);
+			toolBar5.add(jbutton5);
+			toolBar6.add(jbuttonExit);
+			toolBarE.add(labelE);
+			
+		}
+		public void showMe() {
+			this.init();
+			this.addEventHandler();
+			JPanel p = new JPanel();
+			p.add(toolBarE);
+			p.add(toolBar6);
+			FlowLayout flo=new FlowLayout(FlowLayout.CENTER,60,1);
+			p.setLayout(flo);
+			GridLayout grid = new GridLayout(6,1);
+			jFrame.setLayout(grid);
+			jFrame.setBounds(0,0,400,350);
+			jFrame.setVisible(true);	
+			jFrame.add(toolBar1);
+			jFrame.add(toolBar2);
+			jFrame.add(toolBar3);
+			jFrame.add(toolBar4);
+			jFrame.add(toolBar5);
+			jFrame.add(p);
+
+		}
+
+		public void addEventHandler() {
+			jbutton1.addActionListener(new ImportHandler());
+			jbutton2.addActionListener(new DeriveHandler());
+			jbutton3.addActionListener(new InsertHandler());
+			jbutton4.addActionListener(new UpdateHandler());
+			jbutton5.addActionListener(new DeleteHandler());
+			jbuttonExit.addActionListener(new ExitHandler());
+		}
+		public class ImportHandler implements ActionListener{
+			public void actionPerformed(ActionEvent events) {
+				jFrame.dispose();
+				new ImportDialog().showMe();
+			} 
+		}
+		public class DeriveHandler implements ActionListener{
+			public void actionPerformed(ActionEvent events) {
+				jFrame.dispose();
+				new DeriveDialog().showMe();
+			} 
+		}
+		public class InsertHandler implements ActionListener{
+			public void actionPerformed(ActionEvent events) {
+				jFrame.dispose();
+				new InsertDialog().showMe();
+			} 
+		}
+		public class UpdateHandler implements ActionListener{
+			public void actionPerformed(ActionEvent events) {
+				jFrame.dispose();
+				new UpdateDialog().showMe();
+			} 
+		}
+		public class DeleteHandler implements ActionListener{
+			public void actionPerformed(ActionEvent events) {
+				jFrame.dispose();
+				new DeleteDialog().showMe();
+			} 
+		}
+		private class ExitHandler implements ActionListener{
+			public void actionPerformed(ActionEvent events) {
+				System.exit(0);
+			}
+		}
+
+	}
+
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+
+
+public class Menu extends JFrame{
+	private int judgement = 1;
+	private JFrame frame;
+	private JButton labelM;
+	private JButton labelS;
+	private JButton label1;
+	private JButton label2;
+	private JToolBar toolBar1;
+	private JToolBar toolBar2;
+	private JToolBar toolBar3;
+	private JToolBar toolBar4;
+	private JMenuItem jmiInsert,jmiUpdate,jmiDelete,jmiImport,jmiDerive,jmiField,jmiVague,jmiCondition;
+	private UserDao userDao;
+
+	
+	public Menu() {
+		toolBar1 = new JToolBar();
+		toolBar2 = new JToolBar();
+		toolBar3 = new JToolBar();
+		toolBar4 = new JToolBar();
+		frame = new JFrame("���׹���ϵͳ");
+		userDao=new UserDaoImplForList();
+		labelM=new JButton("���׹���",new ImageIcon(this.getClass().getResource("Manage.gif")));
+		labelS=new JButton("���ײ�ѯ",new ImageIcon(this.getClass().getResource("Select1.gif")));
+		label1=new JButton("����",new ImageIcon(this.getClass().getResource("Concern.gif")));
+		label2=new JButton(new ImageIcon(this.getClass().getResource("Exit.gif")));
+		label2.setToolTipText("�˳�");
+		labelS.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new SelectDialog(judgement).showMe();
+			}
+		});
+		label1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new ConcernDialog(judgement).showMe();
+			}
+		});	
+
+	}
+	public void createMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu manageMenu = new JMenu("���׹���");
+		manageMenu.setMnemonic(KeyEvent.VK_N);
+		manageMenu.add(jmiInsert = new JMenuItem("����¼��"));
+		manageMenu.add(jmiUpdate = new JMenuItem("�����޸�"));
+		manageMenu.add(jmiDelete = new JMenuItem("����ɾ��"));
+		manageMenu.add(jmiImport = new JMenuItem("���ݵ���"));
+		manageMenu.add(jmiDerive = new JMenuItem("���ݵ���"));
+
+		menuBar.add(manageMenu);
+		
+		JMenu selectMenu = new JMenu("���ײ�ѯ");
+		selectMenu.setMnemonic(KeyEvent.VK_N);
+		menuBar.add(selectMenu);
+		selectMenu.add(jmiField = new JMenuItem("���ֶβ�ѯ"));
+		selectMenu.add(jmiCondition = new JMenuItem("��������ѯ"));
+		selectMenu.add(jmiVague = new JMenuItem("ģ����ѯ"));
+		
+		frame.setJMenuBar(menuBar);
+	}
+	private void init() {
+		
+		//JPanel jpanel=new JPanel();
+		JPanel p = new JPanel();
+		JPanel p1 = new JPanel();
+		JPanel p2 = new JPanel();
+		GridLayout grid=new GridLayout(3,1,1,100);
+		//setLayout(new GridLayout(2,2,50,50));
+		createMenuBar();
+		//JPanel p = new JPanel();
+	    p.setPreferredSize(new Dimension(200,70));
+		//this.add("Center",p);
+	    toolBar1.add(labelM);
+		p.add(toolBar1);
+		toolBar2.add(labelS);
+		p1.add(toolBar2);
+		GridLayout grid1=new GridLayout(1,2,100,10);
+		p2.setLayout(grid1);
+		toolBar3.add(label1);
+		p2.add(toolBar3);
+		toolBar4.add(label2);
+		p2.add(toolBar4);
+		frame.add(p,BorderLayout.NORTH);
+		frame.add(p1,BorderLayout.CENTER);
+		frame.add(p2,BorderLayout.SOUTH);
+	}
+	public void showMe(){
+		init();
+		this.addEventHandler();
+		frame.setTitle("���׹���ϵͳ");
+		frame.setBounds(0,0,300,250);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
+	}
+	public void addEventHandler(){
+		jmiInsert.addActionListener(new InsertHandler());
+		jmiUpdate.addActionListener(new UpdateHandler());
+		jmiDelete.addActionListener(new DeleteHandler());
+		jmiImport.addActionListener(new ImportHandler());
+		jmiDerive.addActionListener(new DeriveHandler());
+		jmiField.addActionListener(new FieldHandler());
+		jmiVague.addActionListener(new VagueHandler());
+		jmiCondition.addActionListener(new ConditionHandler());
+		label2.addActionListener(new ExitHandler());
+		labelM.addActionListener(new ManageHandler());
+	}
+	private class InsertHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new InsertDialog().showMe();
+		}  		
+	}
+	private class UpdateHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new UpdateDialog().showMe();
+		}  		
+	}
+	private class DeleteHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new DeleteDialog().showMe();
+		}  		
+	}
+	private class ImportHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new ImportDialog().showMe();
+		}  		
+	}
+	private class FieldHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new FieldDialog(judgement).showMe();
+		}  		
+	}
+	private class DeriveHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new DeriveDialog().showMe();
+		}  		
+	}
+	private class VagueHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new VagueDialog(judgement).showMe();
+		}  		
+	}
+	private class ConditionHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new ConditionDialog(judgement).showMe();
+		}  		
+	}
+	public class ManageHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new ManageDialog().showMe();
+		}  		
+	}
+	public class ExitHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			new Interface().showMe();
+			frame.dispose();
+		}  		
+	}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class Menu1 extends JFrame{
+	private int judgement = 0;
+	private JFrame frame;
+	private JButton labelS;
+	private JButton label1;
+	private JButton label2;
+	private JToolBar toolBar1;
+	private JToolBar toolBar2;
+	private JToolBar toolBar3;
+	private JMenuItem jmiField,jmiVague,jmiCondition;
+	private UserDao userDao;
+	JPanel p = new JPanel();
+	JPanel p1 = new JPanel();
+	public Menu1() {
+		frame = new JFrame("���׹���ϵͳ");
+		toolBar1 = new JToolBar();
+		toolBar2 = new JToolBar();
+		toolBar3 = new JToolBar();
+		userDao=new UserDaoImplForList();
+		labelS=new JButton("���ײ�ѯ", new ImageIcon(this.getClass().getResource("Select1.gif")));
+		label1=new JButton("����", new ImageIcon(this.getClass().getResource("Concern.gif")));
+		label2=new JButton( new ImageIcon(this.getClass().getResource("Exit.gif")));
+		label2.setToolTipText("�˳�");
+		labelS.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new SelectDialog(judgement).showMe();
+			}
+		});
+		label1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new ConcernDialog(judgement).showMe();
+			}
+		});	
+	}
+	public void createMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu selectMenu = new JMenu("���ײ�ѯ");
+		selectMenu.setMnemonic(KeyEvent.VK_N);
+		menuBar.add(selectMenu);
+		selectMenu.add(jmiField = new JMenuItem("���ֶβ�ѯ"));
+		selectMenu.add(jmiCondition = new JMenuItem("��������ѯ"));
+		selectMenu.add(jmiVague = new JMenuItem("ģ����ѯ"));
+		
+		frame.setJMenuBar(menuBar);
+	}
+public void init() {
+	
+		createMenuBar();
+		toolBar1.add(labelS);
+		p.add(toolBar1);
+		toolBar2.add(label1);
+		toolBar3.add(label2);
+		FlowLayout flo=new FlowLayout(FlowLayout.CENTER,60,1);
+		p1.setLayout(flo);
+		//p.add(labelS);
+		p1.add(toolBar2);
+		//p1.add(label1);
+		p1.add(toolBar3);
+		//p1.add(label2);	
+//		frame.add(p,BorderLayout.NORTH);
+//		frame.add(p1,BorderLayout.CENTER);
+		
+//		this.add(BorderLayout.SOUTH,p);
+//		this.add(BorderLayout.CENTER,p);
+		
+	}
+	public void showMe(){
+		init();
+		this.addEventHandler();
+		GridLayout grid=new GridLayout(2,1,20,20);
+		frame.setLayout(grid);
+		
+		frame.setTitle("���׹���ϵͳ");
+		frame.setBounds(0,0,400,200);
+//		frame.pack();
+		frame.setVisible(true);
+		frame.add(p,BorderLayout.CENTER);
+		frame.add(p1,BorderLayout.SOUTH);
+		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	public void addEventHandler(){
+		jmiField.addActionListener(new FieldHandler());
+		jmiVague.addActionListener(new VagueHandler());
+		jmiCondition.addActionListener(new ConditionHandler());
+		label2.addActionListener(new ExitHandler());
+	}
+	private class FieldHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new FieldDialog(judgement).showMe();
+		}  		
+	}
+	private class VagueHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new VagueDialog(judgement).showMe();
+		}  		
+	}
+	private class ConditionHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			frame.dispose();
+			new ConditionDialog(judgement).showMe();
+		}  		
+	}
+	public class ExitHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			new Interface().showMe();
+			frame.dispose();
+		}  		
+	}
+}
+
+package shuben;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class ResourceUtil {
+	public static void close(ResultSet rs,Statement st,Connection con) {
+		try {
+			rs.close();
+			st.close();
+			con.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void close(PreparedStatement pst,Connection con) {
+		try {
+			pst.close();
+			con.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+
+package shuben;
+
+import javax.swing.JFrame;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class SelectDialog {
+	private int judgement;
+	private UserDao userDao;
+	private JFrame jFrame;
+	private JButton labelE;
+	private JPanel jpanel,jpane2,jpane3,jpane4;
+	private JToolBar toolBar1,toolBar2,toolBar3,toolBar4,toolBarE;
+	private JButton jbuttonCondition,jbuttonField,jbuttonVague,jbuttonExit;
+	
+	public SelectDialog(int judgement) {
+		this.judgement = judgement;
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		jFrame = new JFrame("���ײ�ѯ");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				jFrame.dispose();
+			//	new Menu().showMe();
+				new JudgeMenu(judgement).Judge();;
+			}
+		});
+	}
+	public void createToolBar() {
+		toolBar1 = new JToolBar();
+		toolBar2 = new JToolBar();
+		toolBar3 = new JToolBar();
+		toolBar4 = new JToolBar();
+		toolBarE = new JToolBar();
+				
+		jbuttonCondition = new JButton("��������ѯ", new ImageIcon(this.getClass().getResource("Select.gif")));//
+		jbuttonCondition.setToolTipText("��������ѯ");
+		
+		jbuttonField = new JButton("���ֶβ�ѯ", new ImageIcon(this.getClass().getResource("Select.gif")));
+		jbuttonField.setToolTipText("���ֶβ�ѯ");
+		
+		jbuttonVague = new JButton("ģ����ѯ", new ImageIcon(this.getClass().getResource("Select.gif")));
+		jbuttonVague.setToolTipText("ģ����ѯ");
+		
+		
+		jbuttonExit = new JButton( new ImageIcon(this.getClass().getResource("Exit.gif")));
+		jbuttonExit.setToolTipText("�˳�");
+		
+//		toolBar1.setPreferredSize(new Dimension(60,140));
+		toolBar1.add(jbuttonCondition);
+		
+//		toolBar2.setPreferredSize(new Dimension(60,140));
+		toolBar2.add(jbuttonField);
+		
+	//	toolBar3.setPreferredSize(new Dimension(60,140));
+		toolBar3.add(jbuttonVague);
+		
+	//	toolBar4.setPreferredSize(new Dimension(60,140));
+		toolBar4.add(jbuttonExit);
+		toolBarE.add(labelE);
+		
+	}
+	public void init() {
+		createToolBar();
+		jpanel = new JPanel();
+		jpane2 = new JPanel();
+		jpane3 = new JPanel();
+		jpane4 = new JPanel();
+
+		jpanel.setLayout(new BorderLayout());	
+//		jpanel.setPreferredSize(new Dimension(200,220));
+		jpanel.add(toolBar1);
+		jpane2.setLayout(new BorderLayout());
+//		jpane2.setPreferredSize(new Dimension(200,200));
+		jpane2.add(toolBar2);
+		jpane3.setLayout(new BorderLayout());	
+//		jpane3.setPreferredSize(new Dimension(200,200));
+		jpane3.add(toolBar3);
+		FlowLayout flo=new FlowLayout(FlowLayout.CENTER,60,1);
+		jpane4.setLayout(flo);
+		
+//		jpane4.setPreferredSize(new Dimension(200,200));
+		
+		jpane4.add(toolBarE);	
+		jpane4.add(toolBar4);
+		
+	}
+	public void showMe() {
+		this.init();
+		this.addEventHandler();
+
+		GridLayout grid = new GridLayout(4,1);
+		jFrame.setLayout(grid);
+		jFrame.setBounds(0,0,400,300);
+		jFrame.setVisible(true);	
+		
+		jFrame.add(jpanel);
+		jFrame.add(jpane2);
+		jFrame.add(jpane3);
+		jFrame.add(jpane4);
+		//jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	public void addEventHandler() {
+		jbuttonCondition.addActionListener(new ConditionQueryHandler());
+		jbuttonField.addActionListener(new FieldQueryHandler());
+		jbuttonVague.addActionListener(new VagueQueryHandler());
+		jbuttonExit.addActionListener(new ExitHandler());
+	}
+	public class ConditionQueryHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			jFrame.dispose();
+			new ConditionDialog(judgement).showMe();
+		} 
+	}
+	public class FieldQueryHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			jFrame.dispose();
+			new FieldDialog(judgement).showMe();
+		} 
+	}
+	public class VagueQueryHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			jFrame.dispose();
+			new VagueDialog(judgement).showMe();
+		} 
+	}
+	private class ExitHandler implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			jFrame.dispose();
+		}
+	}
+
+}
+
+package shuben;
+
+public class Session {
+	boolean has_admin;
+}
+
+package shuben;
+
+import java.awt.List;
+
+public class SessionController{
+	private String systemPassword="123456";
+	Session session = new Session();
+	public Session adminLogin(String passWord) {
+		if(systemPassword.equals(passWord)) {
+		return session;
+		}
+		else {
+			return null;
+		}
+	}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class UpdateDialog extends JFrame{
+	private UserDao userDao;
+	private JFrame frame;
+	private JButton labelE;
+	private JToolBar toolBarE;
+public UpdateDialog(){
+	frame = new JFrame();
+	toolBarE = new JToolBar();
+	labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+	labelE.setToolTipText("�������˵�");
+	labelE.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e) {
+			frame.dispose();
+			new Menu().showMe();
+		}
+	});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+package shuben;
+
+public interface UserDao {
+
+}
+
+package shuben;
+
+public class UserDaoImplForList implements UserDao{
+
+}
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class VagueDialog extends JFrame{
+	private int judgement;
+	private JFrame frame;
+	private JButton labelE;
+	private JToolBar toolBarE;
+	public VagueDialog(int judgement){
+		this.judgement = judgement;
+		frame = new JFrame();
+		toolBarE = new JToolBar();
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new JudgeMenu(judgement).Judge();
+			}
+		});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class ConcernDialog extends JFrame{
+	private int judgement;
+	private JButton labelE;
+	private JToolBar toolBar1;
+	private JFrame jframe=new JFrame();
+	private JLabel text = new JLabel("��Ա��");
+	public ConcernDialog(int judgement) {
+		this.judgement = judgement;
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				jframe.dispose();
+				new JudgeMenu(judgement).Judge();
+			}
+		});
+	}
+	private void init(){
+		GridLayout grid1=new GridLayout(2,1,100,10);
+		jframe.setLayout(grid1);
+		
+		JPanel panel = new JPanel();
+		JPanel panel1 = new JPanel();
+		toolBar1 = new JToolBar();
+		toolBar1.add(labelE);
+		panel.add(text);
+		panel1.add(toolBar1);
+//		jframe.add(panel);
+//		jframe.add(panel1);
+		jframe.add(BorderLayout.NORTH,panel);
+		jframe.add(BorderLayout.CENTER,panel1);
+	}
+	public void showMe(){
+		
+		init(); 
+		jframe.setVisible(true);
+		jframe.validate();	
+		jframe.setBounds(50,50,300,200);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+}
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class ConditionDialog extends JFrame{
+	private int judgement;
+	private JFrame frame;
+	private JButton labelE;
+	private JToolBar toolBarE;
+	public ConditionDialog(int judgement){
+		this.judgement = judgement;
+		frame = new JFrame();
+		toolBarE = new JToolBar(); 
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new JudgeMenu(judgement).Judge();
+			}
+		});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+package shuben;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class ConnectionFactory {
+	private static Properties props= new Properties();
+	
+	static {
+		try {
+			props.load(new FileInputStream("database.properties"));
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static Connection getConnection() {
+		Connection connection=null;
+		try {
+			String driver=props.getProperty("driver");
+			String url=props.getProperty("url");
+			String username=props.getProperty("username");
+			String password=props.getProperty("password");
+			Class.forName(driver);
+			connection=DriverManager.getConnection(url,username,password);
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return connection;
+	}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class DeleteDialog extends JFrame{
+    private UserDao userDao;
+    private JFrame frame;
+    private JButton labelE;
+    private JToolBar toolBarE;
+	public DeleteDialog(){
+		frame = new JFrame();
+		toolBarE = new JToolBar(); 
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new Menu().showMe();
+			}
+		});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class DeriveDialog extends JFrame{
+	private UserDao userDao;
+	private JFrame frame;
+	private JButton labelE;
+	 private JToolBar toolBarE;
+		public DeriveDialog(){
+			frame = new JFrame();
+			toolBarE = new JToolBar(); 
+			labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+			labelE.setToolTipText("�������˵�");
+			labelE.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+					new Menu().showMe();
+				}
+			});
+		}	
+		public void showMe(){
+			toolBarE.add(labelE);
+			JPanel p = new JPanel();
+			p.add(toolBarE);
+			frame.add(p);
+			frame.add(BorderLayout.NORTH,p);
+			frame.add(BorderLayout.CENTER,p);
+			frame.setBounds(50,50,300,120);
+			frame.setVisible(true);
+		}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class FieldDialog extends JFrame{
+	private int judgement;
+	private JFrame frame;
+	private JButton labelE;
+	private JToolBar toolBarE;
+	public FieldDialog(int judgement){
+		toolBarE = new JToolBar();
+		this.judgement = judgement;
+		frame = new JFrame();
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new JudgeMenu(judgement).Judge();
+			}
+		});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class ImportDialog extends JFrame{
+	private UserDao userDao;
+	private JFrame frame;
+	private JButton labelE;
+	private JToolBar toolBarE;
+	public ImportDialog(){
+		toolBarE = new JToolBar();
+		frame = new JFrame();
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new Menu().showMe();
+			}
+		});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+
+public class InsertDialog extends JFrame{
+	private UserDao userDao;
+	private JFrame frame;
+	private JButton labelE;
+	private JToolBar toolBarE;
+	public InsertDialog(){
+		frame = new JFrame();
+		toolBarE = new JToolBar();
+		labelE=new JButton(new ImageIcon(this.getClass().getResource("menu.gif")));
+		labelE.setToolTipText("�������˵�");
+		labelE.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new Menu().showMe();
+			}
+		});
+	}	
+	public void showMe(){
+		toolBarE.add(labelE);
+		JPanel p = new JPanel();
+		p.add(toolBarE);
+		frame.add(p);
+		frame.add(BorderLayout.NORTH,p);
+		frame.add(BorderLayout.CENTER,p);
+		frame.setBounds(50,50,300,120);
+		frame.setVisible(true);
+	}
+}
+
+package shuben;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+public class Interface extends JFrame{
+	private JFrame f;
+	private JButton labelA;
+	private JButton labelU;
+	private JLabel label1;
+	public Interface() {
+		f = new JFrame();
+		label1=new JLabel("��ӭ�������׹���ϵͳ");
+		labelU=new JButton("�û����");
+		labelA=new JButton("����Ա���");
+		labelA.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				f.dispose();
+				new LoginInterface().showMe();
+			}
+		});	
+	}
+	public void init() {
+		
+		JPanel p1=new JPanel();
+		JPanel p2=new JPanel();
+		p1.setLayout(new FlowLayout());
+		p1.add(label1);
+		p2.setLayout(new FlowLayout());
+		p2.add(labelA);
+		p2.add(labelU);
+		f.add(p1);
+		f.add(p2);
+		f.add(BorderLayout.NORTH,p1);
+		f.add(BorderLayout.CENTER,p2);
+	}
+	public void showMe() {
+		init();
+		labelU.addActionListener(new A());
+		f.setBounds(30,60,300,150);
+		f.setVisible(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	public class A implements ActionListener{
+		public void actionPerformed(ActionEvent events) {
+			f.dispose();
+			new Menu1().showMe();
+		
+		}  		
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new Interface().showMe();
+	}
+
+}
+
+package shuben;
+
+public class JudgeMenu {
+	private int judgement;
+	public JudgeMenu(int judgement) {
+		this.judgement = judgement;
+	}
+	public void Judge() {
+		if(judgement == 1) {
+			new Menu().showMe();
+		}
+		if(judgement == 0) {
+			new Menu1().showMe();
+		}
+	}
+}
